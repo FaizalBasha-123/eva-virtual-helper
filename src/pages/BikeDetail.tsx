@@ -12,10 +12,21 @@ import { useVehicleDetails } from '@/hooks/useVehicleData';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import FavouriteButton from '@/components/shared/FavouriteButton';
+import { ShareButton } from '@/components/shared/ShareButton';
+import VehicleSEOHead from '@/components/seo/VehicleSEOHead';
+import { generateVehicleSlug } from '@/utils/slugUtils';
 
-const BikeDetail = () => {
-  const { id } = useParams<{ id: string }>();
-  const { vehicle: bike, loading, error } = useVehicleDetails(id || '', 'bike');
+interface BikeDetailProps {
+  vehicleId?: string;
+}
+
+const BikeDetail = ({ vehicleId: propVehicleId }: BikeDetailProps) => {
+  const { id: paramId } = useParams<{ id: string }>();
+  
+  // Use prop vehicleId if provided, otherwise fall back to URL param
+  const vehicleId = propVehicleId || paramId;
+  
+  const { vehicle: bike, loading, error } = useVehicleDetails(vehicleId || '', 'bike');
   const [activePhotoCategory, setActivePhotoCategory] = useState<string>('');
   
   const formatIndianCurrency = (amount: number) => {
@@ -54,7 +65,7 @@ const BikeDetail = () => {
         user_id: userId,
         user_name: userName,
         phone_number: phoneNumberAsNumber,
-        vehicle_id: id,
+        vehicle_id: vehicleId,
         vehicle: 'bike'
       });
 
@@ -83,6 +94,17 @@ const BikeDetail = () => {
 
   const photoCategories = getPhotoCategories();
   const categoryNames = Object.keys(photoCategories);
+
+  // Generate slug for SEO
+  const slug = bike ? generateVehicleSlug({
+    brand: bike.brand || 'unknown',
+    model: bike.model || 'unknown',
+    variant: bike.variant || 'base',
+    fuel_type: bike.fuel_type || 'petrol',
+    year: bike.year || new Date().getFullYear(),
+    seller_location_city: bike.seller_location_city || 'india',
+    id: bike.id
+  }) : '';
 
   // Get all images for carousel
   const getAllImages = () => {
@@ -138,7 +160,7 @@ const BikeDetail = () => {
         <div className="container mx-auto p-4 text-center">
           <h1 className="text-2xl font-bold mb-4">Bike Not Found</h1>
           <p className="mb-6">The bike you are looking for does not exist or has been removed.</p>
-          <Link to="/search">
+          <Link to="/search-used-bikes">
             <Button>Browse Other Bikes</Button>
           </Link>
         </div>
@@ -148,6 +170,8 @@ const BikeDetail = () => {
 
   return (
     <Layout>
+      <VehicleSEOHead vehicle={bike} type="bike" slug={slug} />
+      
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4 pt-6 lg:pt-24 pb-6">
           <div className="flex items-center text-sm text-muted-foreground mb-4">
@@ -310,9 +334,11 @@ const BikeDetail = () => {
                         {bike.year} {bike.brand} {bike.model}
                       </h1>
                       <div className="flex gap-2">
-                        <Button size="icon" variant="ghost" className="h-8 w-8">
-                          <Share className="h-4 w-4" />
-                        </Button>
+                        <ShareButton
+                          title={`Check out this ${bike.brand} ${bike.model} on VahaanXchange!`}
+                          text={`${bike.year} ${bike.brand} ${bike.model} ${bike.variant} - ${bike.fuel_type} | ${formatIndianCurrency(bike.sell_price)} | ${bike.seller_location_city}`}
+                          className="h-8 w-8"
+                        />
                         <FavouriteButton
                           vehicleId={bike.id}
                           vehicleType="bike"
