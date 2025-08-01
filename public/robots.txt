@@ -1,0 +1,24 @@
+
+User-agent: *
+Allow: /
+
+# Block admin and sensitive areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+
+# Allow important pages
+Allow: /sell
+Allow: /about-us
+Allow: /terms
+Allow: /privacy
+Allow: /faqs
+Allow: /contact-us
+Allow: /search-used-cars
+Allow: /search-used-bikes
+
+# Sitemap reference
+Sitemap: https://www.vahaanxchange.com/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 1
