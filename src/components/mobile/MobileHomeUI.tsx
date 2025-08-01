@@ -130,7 +130,7 @@ const MobileHomeUI = () => {
         {/* Looping video below hero text */}
         <div className="w-screen relative left-1/2 right-1/2 -translate-x-1/2 mt-4">
           <video
-            src="public/resource-uploads/Animated_Video_Generation_Complete.mp4"
+            src="https://vahaanxchange-uploads.s3.ap-southeast-1.amazonaws.com/Mobile/Animated_Video_Generation_Complete.mp4"
             className="rounded-nonew-full"
             autoPlay
             loop
