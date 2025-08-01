@@ -12,10 +12,21 @@ import { useVehicleDetails } from '@/hooks/useVehicleData';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import FavouriteButton from '@/components/shared/FavouriteButton';
+import { ShareButton } from '@/components/shared/ShareButton';
+import VehicleSEOHead from '@/components/seo/VehicleSEOHead';
+import { generateVehicleSlug } from '@/utils/slugUtils';
 
-const CarDetail = () => {
-  const { id } = useParams<{ id: string }>();
-  const { vehicle: car, loading, error } = useVehicleDetails(id || '', 'car');
+interface CarDetailProps {
+  vehicleId?: string;
+}
+
+const CarDetail = ({ vehicleId: propVehicleId }: CarDetailProps) => {
+  const { id: paramId } = useParams<{ id: string }>();
+  
+  // Use prop vehicleId if provided, otherwise fall back to URL param
+  const vehicleId = propVehicleId || paramId;
+  
+  const { vehicle: car, loading, error } = useVehicleDetails(vehicleId || '', 'car');
   const [activePhotoCategory, setActivePhotoCategory] = useState<string>('');
   
   const formatIndianCurrency = (amount: number) => {
@@ -54,7 +65,7 @@ const CarDetail = () => {
         user_id: userId,
         user_name: userName,
         phone_number: phoneNumberAsNumber,
-        vehicle_id: id,
+        vehicle_id: vehicleId,
         vehicle: 'car'
       });
 
@@ -83,6 +94,17 @@ const CarDetail = () => {
 
   const photoCategories = getPhotoCategories();
   const categoryNames = Object.keys(photoCategories);
+
+  // Generate slug for SEO
+  const slug = car ? generateVehicleSlug({
+    brand: car.brand || 'unknown',
+    model: car.model || 'unknown',
+    variant: car.variant || 'base',
+    fuel_type: car.fuel_type || 'petrol',
+    year: car.year || new Date().getFullYear(),
+    seller_location_city: car.seller_location_city || 'india',
+    id: car.id
+  }) : '';
 
   // Get all images for carousel
   const getAllImages = () => {
@@ -148,6 +170,9 @@ const CarDetail = () => {
 
   return (
     <Layout>
+      {/* Add SEO Head component */}
+      <VehicleSEOHead vehicle={car} type="car" slug={slug} />
+      
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4 pt-6 lg:pt-24 pb-6">
           <div className="flex items-center text-sm text-muted-foreground mb-4">
@@ -310,9 +335,11 @@ const CarDetail = () => {
                         {car.year} {car.brand} {car.model}
                       </h1>
                       <div className="flex gap-2">
-                        <Button size="icon" variant="ghost" className="h-8 w-8">
-                          <Share className="h-4 w-4" />
-                        </Button>
+                        <ShareButton
+                          title={`Check out this ${car.brand} ${car.model} on VahaanXchange!`}
+                          text={`${car.year} ${car.brand} ${car.model} ${car.variant} - ${car.fuel_type} | ${formatIndianCurrency(car.sell_price)} | ${car.seller_location_city}`}
+                          className="h-8 w-8"
+                        />
                         <FavouriteButton
                           vehicleId={car.id}
                           vehicleType="car"
