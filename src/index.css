@@ -1,0 +1,395 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+.glowing-border {
+  box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.6);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.dark .glowing-border {
+  box-shadow: 0 0 25px 8px rgba(59, 130, 246, 0.4);
+}
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --primary: 210 100% 50%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 199 89% 48%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 199 89% 48%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 213 31% 91%;
+
+    --primary: 210 100% 50%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 199 89% 48%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased font-poppins;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-poppins font-medium tracking-tight;
+  }
+
+  h1 {
+    @apply text-4xl font-bold lg:text-5xl;
+  }
+
+  h2 {
+    @apply text-3xl font-semibold lg:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold lg:text-3xl;
+  }
+
+  h4 {
+    @apply text-xl font-semibold lg:text-2xl;
+  }
+
+  h5 {
+    @apply text-lg font-semibold lg:text-xl;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/50 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-lg;
+  }
+  
+  .glass-input {
+    @apply bg-white/70 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/5 shadow-sm;
+  }
+  
+  .hover-scale {
+    @apply transition-all duration-300 hover:scale-[1.02];
+  }
+  
+  .card-shadow {
+    @apply shadow-custom-card;
+  }
+  
+  .link-underline {
+    @apply relative after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 after:ease-in-out hover:after:origin-bottom-left hover:after:scale-x-100;
+  }
+  
+  .page-container {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8 py-8;
+  }
+
+  .dropdown-animation {
+    @apply transition-all duration-200 transform origin-top-left;
+  }
+
+  .animated-card {
+    @apply transform transition-all duration-500 hover:scale-105 hover:shadow-xl;
+  }
+  
+  .pulse-button {
+    @apply relative overflow-hidden bg-primary text-white after:absolute after:inset-0 after:animate-pulse-slow after:bg-white/20 after:opacity-0 hover:after:opacity-100;
+  }
+  
+  .animated-border {
+    @apply relative before:absolute before:inset-0 before:rounded-md before:border-2 before:border-primary/50 before:transition-all hover:before:scale-105 hover:before:border-primary hover:before:opacity-100;
+  }
+  
+  .fade-in-button {
+    @apply transition-all duration-300 hover:bg-primary hover:text-white;
+  }
+  
+  .search-bar-grow {
+    @apply transition-all duration-300 transform origin-center;
+  }
+  
+  .search-bar-slide {
+    @apply transition-all duration-500 ease-in-out transform;
+  }
+  
+  .search-bar-fade {
+    @apply transition-opacity duration-300;
+  }
+  
+  .search-bar-3d {
+    @apply transition-all duration-500 transform perspective-1000;
+  }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -100% 0; }
+  100% { background-position: 100% 0; }
+}
+
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes grow-shrink {
+  0% { transform: scale(0.95); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.floating {
+  animation: float 6s ease-in-out infinite;
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.bounce-slow {
+  animation: bounce-slow 4s infinite;
+}
+
+.grow-shrink {
+  animation: grow-shrink 0.5s ease-out;
+}
+
+.dot-pattern {
+  background-image: radial-gradient(circle, rgb(0 0 0 / 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark .dot-pattern {
+  background-image: radial-gradient(circle, rgb(255 255 255 / 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-hide::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.scrollbar-hide::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 770px) {
+  /* Typography adjustments */
+  h1 {
+    font-size: 24px;
+    line-height: 1.2;
+  }
+  
+  h2 {
+    font-size: 20px;
+    line-height: 1.2;
+  }
+  
+  h3 {
+    font-size: 18px;
+    line-height: 1.2;
+  }
+  
+  p {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  /* Card adjustments */
+  .card {
+    border-radius: 12px;
+  }
+  
+  /* Input adjustments */
+  input, select, textarea {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  /* Spacing adjustments */
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  
+  /* Component-specific */
+  .mobile-footer-space {
+    padding-bottom: 70px; /* Space for bottom nav */
+  }
+  
+  /* Touch targets */
+  .mobile-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Mobile small specific */
+@media (max-width: 320px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  
+  h1 {
+    font-size: 22px;
+  }
+  
+  h2 {
+    font-size: 18px;
+  }
+}
+
+/* Additional 404 Page Animations */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes float-gentle {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg); 
+  }
+  50% { 
+    transform: translateY(-15px) rotate(2deg); 
+  }
+}
+
+.animate-float-gentle {
+  animation: float-gentle 4s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.6), 0 0 30px rgba(255, 255, 0, 0.4);
+  }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.animate-flicker {
+  animation: flicker 1.5s ease-in-out infinite;
+}
+
+/* Responsive adjustments for 404 page */
+@media (max-width: 770px) {
+  .animate-bounce {
+    animation-duration: 4s;
+  }
+  
+  .animate-pulse {
+    animation-duration: 3s;
+  }
+}
+
+@media (max-width: 320px) {
+  .animate-fade-in {
+    animation-duration: 1.2s;
+  }
+}
