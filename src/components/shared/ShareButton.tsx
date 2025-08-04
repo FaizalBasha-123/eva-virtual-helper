@@ -21,8 +21,30 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
   const [showFallback, setShowFallback] = useState(false);
 
   const getShareUrl = () => {
-    // Always use the current page URL which already has the slug format
-    // This ensures consistency between what users see and what they share
+    // For WhatsApp and social media sharing, we need to use the backend SSR URL
+    // This ensures social media crawlers get the proper meta tags
+    if (vehicleId && vehicleType) {
+      // Extract vehicle ID from current URL if it has slug format
+      const currentPath = window.location.pathname;
+      const slugMatch = currentPath.match(/\/used-(car|bike)-details\/([^/?]+)/);
+      
+      if (slugMatch) {
+        const [, pathType, slug] = slugMatch;
+        // Extract UUID from slug (last 36 characters)
+        const uuidRegex = /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+        const uuidMatch = slug.match(uuidRegex);
+        
+        if (uuidMatch) {
+          const extractedId = uuidMatch[0];
+          return `https://vahaan-backend.vercel.app/ssr/${pathType}/${extractedId}`;
+        }
+      }
+      
+      // Fallback to vehicle ID passed as prop
+      return `https://vahaan-backend.vercel.app/ssr/${vehicleType}/${vehicleId}`;
+    }
+    
+    // For non-vehicle pages, use current URL
     return window.location.href;
   };
 
