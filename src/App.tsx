@@ -28,7 +28,7 @@ import Profile from "./pages/Profile";
 import Posted from "@/components/sell-page/Posted";
 import SEOProvider from "./components/seo/SEOProvider";
 import PhoneAuthModal from "@/components/auth/PhoneAuthModal";
-import SocialMediaRedirect from "./components/seo/SocialMediaRedirect";
+import SocialMediaRedirect from "@/components/seo/SocialMediaRedirect";
 
 // Import other pages
 import Favourites from "./pages/Favourites";
