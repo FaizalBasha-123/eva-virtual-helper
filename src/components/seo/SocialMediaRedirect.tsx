@@ -31,10 +31,10 @@ const SocialMediaRedirect = () => {
     const vehiclePageMatch = location.pathname.match(/\/used-(car|bike)-details\/([^/?]+)/);
     
     if ((isCrawler || isShareRequest) && vehiclePageMatch) {
-      const [, vehicleType, vehicleId] = vehiclePageMatch;
+      const [, vehicleType, slug] = vehiclePageMatch;
       
-      // Redirect crawlers to backend SSR endpoint
-      const backendUrl = `https://vahaan-backend.vercel.app/ssr/${vehicleType}/${vehicleId}`;
+      // Redirect crawlers to backend SSR endpoint with slug format
+      const backendUrl = `https://vahaan-backend.vercel.app/used-${vehicleType}-details/${slug}`;
       
       console.log('Redirecting crawler/share request to:', backendUrl);
       window.location.replace(backendUrl);
