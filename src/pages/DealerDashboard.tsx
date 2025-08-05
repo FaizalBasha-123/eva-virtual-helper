@@ -26,7 +26,6 @@ const DealerDashboard = () => {
   const [dealerName, setDealerName] = useState<string>("");
   
   const { selectedCity } = useCityStore();
-  const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -38,33 +37,25 @@ const DealerDashboard = () => {
   // Fetch dealer details and vehicles
   useEffect(() => {
     const fetchDealerData = async () => {
-      if (!user) {
+      // Get dealerId from localStorage
+      const dealerId = localStorage.getItem('dealerId');
+      if (!dealerId) {
+        toast({
+          title: "Error",
+          description: "Dealer ID not found. Please sign in again.",
+          variant: "destructive",
+        });
         navigate('/');
         return;
       }
-
-      try {
-        // Get dealerId from localStorage
-        const dealerId = localStorage.getItem('dealerId');
-        if (!dealerId) {
-          toast({
-            title: "Error",
-            description: "Dealer ID not found. Please sign in again.",
-            variant: "destructive",
-          });
-          navigate('/');
-          return;
-        }
-        await fetchVehicles(dealerId);
-      } catch (error) {
-        console.error('Error:', error);
-      } finally {
-        setLoading(false);
-      }
+      await fetchVehicles(dealerId);
+      // Set dealer name from localStorage
+      const dealerNameStored = localStorage.getItem('dealerName');
+      if (dealerNameStored) setDealerName(dealerNameStored);
     };
-
     fetchDealerData();
-  }, [user, navigate, toast]);
+    setLoading(false);
+  }, [navigate, toast]);
 
   const fetchVehicles = async (dealerId: string) => {
     try {
