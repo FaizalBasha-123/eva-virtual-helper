@@ -163,7 +163,7 @@ const MobileHeader = ({ currentPath }) => {
                     {typeof window !== 'undefined' && localStorage.getItem('dealerName') && (
                       <button
                         onClick={() => navigate('/dealer-dashboard')}
-                        className="block w-full text-left px-2 py-3 font-semibold text-primary hover:bg-primary/10 rounded-md"
+                        className="block w-full text-left px-2 py-3 font-semibold text-primary hover:bg-primary/10 rounded-md border-primary"
                       >
                         {localStorage.getItem('dealerName')}
                       </button>
