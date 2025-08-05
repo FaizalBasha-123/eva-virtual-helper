@@ -153,7 +153,7 @@ const Header = () => {
                   Buy Bikes
                 </Link>
               <Link
-                  to="/dealer"
+                  to="/dealers"
                   className={`nav-link font-medium transition-colors flex items-center ${location.pathname === '/dealer' ? 'text-primary link-underline after:scale-x-100 after:origin-bottom-left' : 'text-foreground hover:text-primary link-underline'}`}
                 >
                   Dealer
