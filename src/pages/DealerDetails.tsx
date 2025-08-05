@@ -228,7 +228,80 @@ const DealerDetails: React.FC = () => {
           <div className="flex flex-col w-full md:flex-row md:items-center md:justify-between gap-4">
             {/* Dealer Name and Contact Info */}
             <div className="flex-1 bg-primary p-6 rounded-lg shadow-lg border border-white dark:border-gray-800">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              {/* Mobile Layout */}
+              <div className="flex flex-col md:hidden gap-4">
+                {/* Dealer Name with Navigation Arrows */}
+                <div className="flex items-center justify-center gap-4">
+                  {/* Previous Dealer Button */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={navigateToPreviousDealer}
+                    disabled={currentDealerIndex <= 0}
+                    className="text-white hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed p-2"
+                    title="Previous Dealer"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </Button>
+                  
+                  {/* Dealer Name */}
+                  <div className="text-center">
+                    <h1 className="text-2xl font-bold text-white">
+                      {dealer?.name || 'Loading...'}
+                    </h1>
+                    {allDealers.length > 0 && (
+                      <p className="text-white/80 text-xs mt-1">
+                        {currentDealerIndex + 1} of {allDealers.length} dealers
+                      </p>
+                    )}
+                  </div>
+                  
+                  {/* Next Dealer Button */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={navigateToNextDealer}
+                    disabled={currentDealerIndex >= allDealers.length - 1}
+                    className="text-white hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed p-2"
+                    title="Next Dealer"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </Button>
+                </div>
+
+                {/* Contact Info Below - Centered */}
+                <div className="flex flex-col items-center gap-3 text-white">
+                  {/* Location */}
+                  {dealer?.dealer_location && (
+                    <div className="flex items-center">
+                      <MapPin className="w-4 h-4 mr-2" />
+                      <span className="text-sm">{dealer.dealer_location}</span>
+                    </div>
+                  )}
+                  
+                  {/* Phone and Share in a row */}
+                  <div className="flex items-center gap-4">
+                    {dealer?.phone_number && (
+                      <div className="flex items-center">
+                        <Phone className="w-4 h-4 mr-2" />
+                        <span className="text-sm">{dealer.phone_number}</span>
+                      </div>
+                    )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleShare}
+                      className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20"
+                    >
+                      <Share2 className="w-3 h-3" />
+                      Share
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop Layout */}
+              <div className="hidden md:flex md:items-center md:justify-between gap-4">
                 {/* Left: Location */}
                 <div className="flex items-center text-white">
                   {dealer?.dealer_location && (
@@ -239,7 +312,7 @@ const DealerDetails: React.FC = () => {
                   )}
                 </div>
                 
-                {/* Center: Dealer Name with Navigation Arrows and Location */}
+                {/* Center: Dealer Name with Navigation Arrows */}
                 <div className="flex items-center gap-4">
                   {/* Previous Dealer Button */}
                   <Button
@@ -253,7 +326,7 @@ const DealerDetails: React.FC = () => {
                     <ChevronLeft className="w-5 h-5" />
                   </Button>
                   
-                  {/* Dealer Name and Location */}
+                  {/* Dealer Name */}
                   <div className="text-center">
                     <h1 className="text-3xl font-bold text-white">
                       {dealer?.name || 'Loading...'}
