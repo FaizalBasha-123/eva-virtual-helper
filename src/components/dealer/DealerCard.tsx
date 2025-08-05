@@ -95,7 +95,7 @@ const DealerCard: React.FC<DealerCardProps> = ({ dealer, vehicleType }) => {
   };
 
   return (
-    <Card className="w-full shadow-lg border bg-white dark:bg-gray-800 [&.sc-VHjGu.fAsLcW]:!transform-none [&.sc-VHjGu.fAsLcW]:!scale-100 [&.sc-VHjGu.fAsLcW]:!transition-none [&.sc-VHjGu.fAsLcW]:!animate-none">
+    <div className="w-full shadow-lg border bg-white dark:bg-gray-800 [&.sc-VHjGu.fAsLcW]:!transform-none [&.sc-VHjGu.fAsLcW]:!scale-100 [&.sc-VHjGu.fAsLcW]:!transition-none [&.sc-VHjGu.fAsLcW]:!animate-none">
       <CardHeader className="pb-4">
         <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">{dealer.name}</CardTitle>
         <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -172,7 +172,7 @@ const DealerCard: React.FC<DealerCardProps> = ({ dealer, vehicleType }) => {
           )}
         </div>
       </CardContent>
-    </Card>
+    </div>
   );
 };
 
