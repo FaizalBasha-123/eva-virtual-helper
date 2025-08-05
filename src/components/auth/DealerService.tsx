@@ -6,7 +6,7 @@ const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
 export const DealerService = {
-  async upsertDealer({ phoneNumber, dealerName }) {
+  async upsertDealer({ phoneNumber, dealerName, dealerLocation }) {
     // Upsert dealer into dealer_details table (runtime cast)
     return await supabase
       .from("dealer_details")
@@ -14,6 +14,7 @@ export const DealerService = {
         {
           phone_number: parseInt(phoneNumber),
           name: dealerName,
+          dealer_location: dealerLocation,
         },
         {
           onConflict: "phone_number",
