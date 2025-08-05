@@ -163,7 +163,7 @@ const MobileHeader = ({ currentPath }) => {
                     {typeof window !== 'undefined' && localStorage.getItem('dealerName') && (
                       <button
                         onClick={() => navigate('/dealer-dashboard')}
-                        className="block w-full text-left px-2 py-3 font-semibold text-primary hover:bg-primary/10 rounded-md border-primary"
+                        className="block w-full text-left px-2 py-3 font-semibold text-primary hover:bg-primary/10 rounded-md"
                       >
                         {localStorage.getItem('dealerName')}
                       </button>
@@ -184,6 +184,10 @@ const MobileHeader = ({ currentPath }) => {
 
                     <Link to="/search-used-bikes" className="block px-2 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
                       Buy Bike
+                    </Link>
+
+                    <Link to="/dealers" className="block px-2 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
+                      Dealers
                     </Link>
 
                     <Link to="/sell" className="block px-2 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
