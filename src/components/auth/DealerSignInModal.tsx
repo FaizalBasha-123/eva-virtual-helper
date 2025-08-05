@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useCityStore } from "@/store/useCityStore";
 import CityModal from "@/components/cars/CityModal";
 import LocationInput from "@/components/shared/LocationInput";
-import { supabase } from "@/integrations/supabase/client";
+import { DealerService } from "./DealerService";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
@@ -138,17 +138,11 @@ const DealerSignInModal: React.FC<DealerSignInModalProps> = ({ isOpen, onClose }
     try {
       const result = await confirmationResult.confirm(otp);
       const user = result.user;
-      // Add dealer to user_details table with dealer flag
-      const { data, error } = await supabase
-        .from('user_details')
-        .upsert({
-          phone_number: parseInt(phoneNumber),
-          name: dealerName
-        }, {
-          onConflict: 'phone_number'
-        })
-        .select()
-        .single();
+      // Add dealer to dealer_details table
+      const { data, error } = await DealerService.upsertDealer({
+        phoneNumber,
+        dealerName
+      });
       if (error) {
         console.error('Error saving dealer:', error);
         toast({
@@ -165,15 +159,11 @@ const DealerSignInModal: React.FC<DealerSignInModalProps> = ({ isOpen, onClose }
         dealerName: dealerName
       });
 
-      // Fetch dealer id from dealer_details using phone number and store in localStorage
+      // Fetch dealer id from dealer_details using DealerService and store in localStorage
       try {
-        const { data: dealerDetails, error: dealerError } = await supabase
-          .from('dealer_details')
-          .select('id')
-          .eq('phone_number', parseInt(phoneNumber))
-          .single();
-        if (!dealerError && dealerDetails && dealerDetails.id) {
-          localStorage.setItem('dealerId', dealerDetails.id.toString());
+        const dealerId = await DealerService.getDealerId(phoneNumber);
+        if (dealerId) {
+          localStorage.setItem('dealerId', dealerId.toString());
         }
       } catch (err) {
         console.error('Error fetching dealer id:', err);
