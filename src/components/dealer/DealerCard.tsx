@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Phone, MapPin, Car, Bike, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -48,6 +48,11 @@ const DealerCard: React.FC<DealerCardProps> = ({ dealer, vehicleType }) => {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+
+  const handleDealerClick = () => {
+    navigate(`/dealerdetails?dealerId=${dealer.id}`);
+  };
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -95,7 +100,10 @@ const DealerCard: React.FC<DealerCardProps> = ({ dealer, vehicleType }) => {
   };
 
   return (
-    <div className="w-full shadow-lg border rounded-lg bg-white dark:bg-gray-800 [&.sc-VHjGu.fAsLcW]:!transform-none [&.sc-VHjGu.fAsLcW]:!scale-100 [&.sc-VHjGu.fAsLcW]:!transition-none [&.sc-VHjGu.fAsLcW]:!animate-none">
+    <div 
+      className="w-full shadow-lg border rounded-lg bg-white dark:bg-gray-800 [&.sc-VHjGu.fAsLcW]:!transform-none [&.sc-VHjGu.fAsLcW]:!scale-100 [&.sc-VHjGu.fAsLcW]:!transition-none [&.sc-VHjGu.fAsLcW]:!animate-none cursor-pointer hover:shadow-xl transition-shadow duration-300"
+      onClick={handleDealerClick}
+    >
       <CardHeader className="pb-4 md:pl-12">
         <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">{dealer.name}</CardTitle>
         <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -129,7 +137,10 @@ const DealerCard: React.FC<DealerCardProps> = ({ dealer, vehicleType }) => {
             <div className="relative">
               {/* Left Arrow */}
               <button
-                onClick={scrollLeft}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  scrollLeft();
+                }}
                 className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-gray-800 shadow-lg rounded-full p-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 aria-label="Scroll left"
               >
@@ -144,6 +155,7 @@ const DealerCard: React.FC<DealerCardProps> = ({ dealer, vehicleType }) => {
                   scrollbarWidth: 'none', 
                   msOverflowStyle: 'none'
                 }}
+                onClick={(e) => e.stopPropagation()}
               >
                 {vehicles.map((vehicle) => (
                   <div key={vehicle.id} className="flex-shrink-0 w-72">
@@ -158,7 +170,10 @@ const DealerCard: React.FC<DealerCardProps> = ({ dealer, vehicleType }) => {
 
               {/* Right Arrow */}
               <button
-                onClick={scrollRight}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  scrollRight();
+                }}
                 className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-gray-800 shadow-lg rounded-full p-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 aria-label="Scroll right"
               >
@@ -177,4 +192,3 @@ const DealerCard: React.FC<DealerCardProps> = ({ dealer, vehicleType }) => {
 };
 
 export default DealerCard;
-
