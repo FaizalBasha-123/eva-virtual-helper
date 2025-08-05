@@ -122,7 +122,7 @@ const Header = () => {
               {typeof window !== 'undefined' && localStorage.getItem('dealerName') && (
                 <Button
                   variant="outline"
-                  className="font-semibold text-primary border-white bg-gray-400"
+                  className="font-semibold text-primary border-white bg-gray-100"
                   onClick={() => navigate('/dealer-dashboard')}
                 >
                   {localStorage.getItem('dealerName')}
