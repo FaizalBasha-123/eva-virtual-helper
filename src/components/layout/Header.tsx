@@ -49,6 +49,7 @@ const Header = () => {
     if (pathname === '/search' && type === 'bike') return 'bikes';
     if (pathname.includes('/cars-buy-section')) return 'cars';
     if (pathname.includes('/bikes')) return 'bikes';
+    if (pathname.includes('/dealers') || pathname.includes('/dealerdetails')) return 'dealers';
     
     if (pathname.includes('/sell')) {
       return vehicleType === 'car' ? 'cars' : 'bikes';
@@ -122,7 +123,7 @@ const Header = () => {
               {typeof window !== 'undefined' && localStorage.getItem('dealerName') && (
                 <Button
                   variant="outline"
-                  className="font-semibold text-primary border-white bg-gray-100"
+                  className="font-semibold text-primary border-white bg-gray-400"
                   onClick={() => navigate('/dealer-dashboard')}
                 >
                   {localStorage.getItem('dealerName')}
@@ -154,7 +155,13 @@ const Header = () => {
                 </Link>
               <Link
                   to="/dealers"
-                  className={`nav-link font-medium transition-colors flex items-center ${location.pathname === '/dealer' ? 'text-primary link-underline after:scale-x-100 after:origin-bottom-left' : 'text-foreground hover:text-primary link-underline'}`}
+                  className={`nav-link font-medium transition-colors flex items-center ${
+                    isNavItemActive('dealers') 
+                      ? 'text-primary link-underline after:scale-x-100 after:origin-bottom-left' 
+                      : 'text-foreground hover:text-primary link-underline'
+                  }`}
+                  onMouseEnter={() => setHoveredItem('dealers')}
+                  onMouseLeave={() => setHoveredItem(null)}
                 >
                   Dealer
                 </Link>
