@@ -26,7 +26,7 @@ const MobileHeader = ({ currentPath }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   // Determine if we are on home or sell page
-  const isSpecialPage = currentPath === "/" || currentPath === "/sell";
+  const isSpecialPage = currentPath === "/" || currentPath === "/sell" || currentPath.includes("/dealers") || currentPath.includes("/dealerdetails");
 
   const iconColor = isSpecialPage && !isScrolled ? "white" : undefined;
 
