@@ -37,6 +37,7 @@ import Bookings from "./pages/Bookings";
 import DealerDetails from "./pages/DealerDetails";
 import ApplyDealerPage from "./pages/ApplyDealer";
 import DealerDashboard from "./pages/DealerDashboard";
+import Dealers from "./pages/Dealers";
 import Partner from "./pages/Partner";
 import Buy from "./pages/Buy";
 
@@ -113,6 +114,7 @@ function App() {
                 <Route path="/dealerdetails" element={<DealerDetails />} />
                 <Route path="/dealer-dashboard" element={<DealerDashboard />} />
                 <Route path="/apply-dealer" element={<ApplyDealerPage />} />
+                <Route path="/dealers" element={<Dealers />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/posted" element={<Posted />} />
                 
