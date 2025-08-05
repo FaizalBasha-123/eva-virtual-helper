@@ -141,7 +141,8 @@ const DealerSignInModal: React.FC<DealerSignInModalProps> = ({ isOpen, onClose }
       // Add dealer to dealer_details table
       const { data, error } = await DealerService.upsertDealer({
         phoneNumber,
-        dealerName
+        dealerName,
+        dealerLocation: selectedCity
       });
       if (error) {
         console.error('Error saving dealer:', error);
