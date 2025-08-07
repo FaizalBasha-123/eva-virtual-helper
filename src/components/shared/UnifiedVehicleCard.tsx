@@ -100,6 +100,7 @@ const UnifiedVehicleCard = ({ vehicle, type }: UnifiedVehicleCardProps) => {
           <div className="flex justify-between items-start mb-2">
             <h3 className="font-semibold line-clamp-1">{vehicleName}</h3>
             <p className="font-bold text-black dark:text-white">
+              {/*
               {vehicle.sell_price === 0 ? (
                 <button
                   onClick={(e) => {
@@ -113,6 +114,8 @@ const UnifiedVehicleCard = ({ vehicle, type }: UnifiedVehicleCardProps) => {
                   Contact Seller
                 </button>
               ) : vehicle.sell_price != null ? formatPrice(vehicle.sell_price) : 'No Data'}
+              */}
+              {vehicle.sell_price != null ? formatPrice(vehicle.sell_price) : 'No Data'}
             </p>
           </div>
           
