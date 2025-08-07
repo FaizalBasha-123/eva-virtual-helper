@@ -25,6 +25,9 @@ interface Vehicle {
   year?: number;
   sell_price?: number;
   seller_location_city?: string;
+  seller_type?: string;
+  kilometers_driven?: number;
+  number_of_owners?: number;
   photos?: any;
   created_at?: string;
 }
@@ -108,7 +111,7 @@ const DealerDetails: React.FC = () => {
         const tableName = vehicleType === 'car' ? 'car_seller_listings' : 'bike_seller_listings';
         
         // Use direct API call to avoid TypeScript issues like in DealerCard
-        const response = await fetch(`https://iaptxaruwnwqeukrjibq.supabase.co/rest/v1/${tableName}?dealer_id=eq.${dealerIdFromUrl}&select=id,brand,model,variant,fuel_type,year,sell_price,seller_location_city,photos`, {
+        const response = await fetch(`https://iaptxaruwnwqeukrjibq.supabase.co/rest/v1/${tableName}?dealer_id=eq.${dealerIdFromUrl}&select=id,brand,model,variant,fuel_type,year,sell_price,kilometers_driven,number_of_owners,seller_type,seller_location_city,photos`, {
           headers: {
             'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhcHR4YXJ1d253cWV1a3JqaWJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM1MTQ0NTQsImV4cCI6MjA2OTA5MDQ1NH0.VxJGls9WiYXIATCUHmlZ2VjbJJKgiRSzgx6cqXTfKa8',
             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhcHR4YXJ1d253cWV1a3JqaWJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM1MTQ0NTQsImV4cCI6MjA2OTA5MDQ1NH0.VxJGls9WiYXIATCUHmlZ2VjbJJKgiRSzgx6cqXTfKa8',
@@ -222,13 +225,13 @@ const DealerDetails: React.FC = () => {
         canonicalUrl={`https://www.vahaanxchange.com/dealerdetails?dealerId=${dealerIdFromUrl}`}
       />
       
-      <div className="container mx-auto mb-12 px-4 pt-12 lg:pt-24">
+      <div className="container mx-auto mb-12 px-4 pt-12 md:pt-24">
         {/* Dealer Header */}
         <div className="mb-8">
           <div className="flex flex-col w-full md:flex-row md:items-center md:justify-between gap-4">
             {/* Dealer Name and Contact Info */}
             <div className="flex-1 bg-primary p-6 rounded-lg shadow-lg border border-white dark:border-gray-800">
-              {/* Mobile Layout */}
+              {/* Mobile Layout (unchanged) */}
               <div className="flex flex-col md:hidden gap-4">
                 {/* Dealer Name with Navigation Arrows */}
                 <div className="flex items-center justify-center gap-4">
@@ -300,10 +303,10 @@ const DealerDetails: React.FC = () => {
                 </div>
               </div>
 
-              {/* Desktop Layout */}
-              <div className="hidden md:flex md:items-center md:justify-between gap-4">
+              {/* Desktop Layout: Location left, Name center, Contact/Share right */}
+              <div className="hidden md:flex md:items-center md:gap-4 w-full">
                 {/* Left: Location */}
-                <div className="flex items-center text-white">
+                <div className="flex items-center text-white md:w-1/3 justify-start">
                   {dealer?.dealer_location && (
                     <div className="flex items-center">
                       <MapPin className="w-5 h-5 mr-2" />
@@ -311,10 +314,9 @@ const DealerDetails: React.FC = () => {
                     </div>
                   )}
                 </div>
-                
+
                 {/* Center: Dealer Name with Navigation Arrows */}
-                <div className="flex items-center gap-4">
-                  {/* Previous Dealer Button */}
+                <div className="flex items-center gap-4 justify-center md:w-1/3">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -325,8 +327,6 @@ const DealerDetails: React.FC = () => {
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </Button>
-                  
-                  {/* Dealer Name */}
                   <div className="text-center">
                     <h1 className="text-3xl font-bold text-white">
                       {dealer?.name || 'Loading...'}
@@ -337,8 +337,6 @@ const DealerDetails: React.FC = () => {
                       </p>
                     )}
                   </div>
-                  
-                  {/* Next Dealer Button */}
                   <Button
                     variant="ghost"
                     size="sm"
@@ -350,9 +348,9 @@ const DealerDetails: React.FC = () => {
                     <ChevronRight className="w-5 h-5" />
                   </Button>
                 </div>
-                
+
                 {/* Right: Phone and Share */}
-                <div className="flex items-center gap-4 text-white min-w-0 md:flex-1 justify-end">
+                <div className="flex items-center gap-4 text-white md:w-1/3 justify-end">
                   {dealer?.phone_number && (
                     <div className="flex items-center">
                       <Phone className="w-5 h-5 mr-2" />
