@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Phone, MapPin, Car, Bike, ChevronLeft, ChevronRight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { generateVehicleSlug } from '@/utils/slugUtils';
+import UnifiedVehicleCard from '@/components/shared/UnifiedVehicleCard';
 import CarCard from '@/components/cars/CarCard';
 import BikeCard from '@/components/bikes/BikeCard';
 
@@ -13,7 +14,6 @@ interface Dealer {
   name: string;
   phone_number: string;
   dealer_location?: string;
-  location?: string;
   created_at?: string;
 }
 
@@ -26,6 +26,9 @@ interface Vehicle {
   year?: number;
   sell_price?: number;
   seller_location_city?: string;
+  seller_type?: string;
+  kilometers_driven?: number;
+  number_of_owners?: number;
   photos?: any;
   created_at?: string;
 }
@@ -61,7 +64,7 @@ const DealerCard: React.FC<DealerCardProps> = ({ dealer, vehicleType }) => {
         const tableName = vehicleType === 'car' ? 'car_seller_listings' : 'bike_seller_listings';
         
         // Use direct API call to avoid TypeScript issues
-        const response = await fetch(`https://iaptxaruwnwqeukrjibq.supabase.co/rest/v1/${tableName}?dealer_id=eq.${dealer.id}&select=id,brand,model,variant,fuel_type,year,sell_price,seller_location_city,photos&limit=10`, {
+        const response = await fetch(`https://iaptxaruwnwqeukrjibq.supabase.co/rest/v1/${tableName}?dealer_id=eq.${dealer.id}&select=id,brand,model,variant,fuel_type,year,sell_price,number_of_owners,kilometers_driven,seller_location_city,seller_type,photos&limit=10`, {
           headers: {
             'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhcHR4YXJ1d253cWV1a3JqaWJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM1MTQ0NTQsImV4cCI6MjA2OTA5MDQ1NH0.VxJGls9WiYXIATCUHmlZ2VjbJJKgiRSzgx6cqXTfKa8',
             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhcHR4YXJ1d253cWV1a3JqaWJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM1MTQ0NTQsImV4cCI6MjA2OTA5MDQ1NH0.VxJGls9WiYXIATCUHmlZ2VjbJJKgiRSzgx6cqXTfKa8',
@@ -159,11 +162,7 @@ const DealerCard: React.FC<DealerCardProps> = ({ dealer, vehicleType }) => {
               >
                 {vehicles.map((vehicle) => (
                   <div key={vehicle.id} className="flex-shrink-0 w-72">
-                    {vehicleType === 'car' ? (
-                      <CarCard car={vehicle} />
-                    ) : (
-                      <BikeCard bike={vehicle} />
-                    )}
+                    <UnifiedVehicleCard vehicle={vehicle} type={vehicleType} />
                   </div>
                 ))}
               </div>
