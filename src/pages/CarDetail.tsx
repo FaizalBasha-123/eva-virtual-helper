@@ -356,6 +356,7 @@ const CarDetail = ({ vehicleId: propVehicleId }: CarDetailProps) => {
                     </div>
                     
                     <div className="text-2xl font-bold text-primary mb-4">
+                      {/*
                       {car.sell_price === 0 ? (
                         <a
                           href="https://wa.me/918108104175"
@@ -365,6 +366,8 @@ const CarDetail = ({ vehicleId: propVehicleId }: CarDetailProps) => {
                         >For price contact seller
                         </a>
                       ) : formatIndianCurrency(car.sell_price)}
+                      */}
+                      {formatIndianCurrency(car.sell_price)}
                     </div>
                     
                     <Separator className="mb-4" />
