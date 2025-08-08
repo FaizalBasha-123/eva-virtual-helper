@@ -14,13 +14,18 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import FavouriteButton from "./FavouriteButton";
 import { generateVehicleSlug } from "@/utils/slugUtils";
+import DealerDashboardCardActions from "@/components/dealer/DealerDashboardCardActions";
 
 interface UnifiedVehicleCardProps {
   vehicle: any;
   type: 'car' | 'bike';
+  showActions?: boolean;
+  onViewDetails?: () => void;
+  onDelete?: () => void;
+  hideFavourite?: boolean;
 }
 
-const UnifiedVehicleCard = ({ vehicle, type }: UnifiedVehicleCardProps) => {
+const UnifiedVehicleCard = ({ vehicle, type, showActions, onViewDetails, onDelete, hideFavourite }: UnifiedVehicleCardProps) => {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -65,7 +70,12 @@ const UnifiedVehicleCard = ({ vehicle, type }: UnifiedVehicleCardProps) => {
   const detailRoute = type === 'car' ? `/used-car-details/${slug}` : `/used-bike-details/${slug}`;
 
   return (
-    <Link to={detailRoute} className="block h-full">
+    <Link to={detailRoute} className="block h-full" onClick={(e) => {
+      if (showActions) {
+        // Allow action buttons to control navigation via onViewDetails
+        // Default click still navigates unless prevented by action handlers
+      }
+    }}>
       <Card className="overflow-hidden min-h-[360px] w-full hover:shadow-md transition-shadow duration-300 lg:h-full">
         {/* Image Container */}
         <div className="relative overflow-hidden aspect-[16/9]">
@@ -79,12 +89,24 @@ const UnifiedVehicleCard = ({ vehicle, type }: UnifiedVehicleCardProps) => {
             height="180"
             style={{ aspectRatio: '16/9' }}
           />
+          {showActions && (
+            <DealerDashboardCardActions
+              onViewDetails={() => {
+                if (onViewDetails) {
+                  onViewDetails();
+                }
+              }}
+              onDelete={onDelete}
+            />
+          )}
           
-          <FavouriteButton
-            vehicleId={vehicle.id}
-            vehicleType={type}
-            className="absolute top-3 right-3"
-          />
+          {!hideFavourite && (
+            <FavouriteButton
+              vehicleId={vehicle.id}
+              vehicleType={type}
+              className="absolute top-3 right-3"
+            />
+          )}
           
           {/* Tag */}
           {vehicle.tag && vehicle.tag.trim() !== '' && (
