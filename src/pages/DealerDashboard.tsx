@@ -11,6 +11,7 @@ import { SlidersHorizontal, X } from "lucide-react";
 import { useCityStore } from "@/store/useCityStore";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useVehicle } from "@/context/VehicleContext";
 import UnifiedVehicleCard from "@/components/shared/UnifiedVehicleCard";
 import { useCanonical } from "@/hooks/useCanonical";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -21,7 +22,7 @@ import { useToast } from "@/hooks/use-toast";
 const DealerDashboard = () => {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [appliedFilters, setAppliedFilters] = useState<Record<string, any>>({});
-  const [vehicleType, setVehicleType] = useState<'car' | 'bike'>('car');
+  const [vehicleType, setLocalVehicleType] = useState<'car' | 'bike'>('car');
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [dealerName, setDealerName] = useState<string>("");
@@ -29,6 +30,7 @@ const DealerDashboard = () => {
   const { selectedCity } = useCityStore();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { setVehicleType } = useVehicle();
   
   // Set canonical URL for dealer dashboard
   useCanonical('/dealer-dashboard');
@@ -159,13 +161,13 @@ const DealerDashboard = () => {
           <div className="flex gap-2">
             <Button 
               variant={vehicleType === 'car' ? 'default' : 'outline'}
-              onClick={() => setVehicleType('car')}
+              onClick={() => setLocalVehicleType('car')}
             >
               Cars
             </Button>
             <Button 
               variant={vehicleType === 'bike' ? 'default' : 'outline'}
-              onClick={() => setVehicleType('bike')}
+              onClick={() => setLocalVehicleType('bike')}
             >
               Bikes
             </Button>
@@ -232,8 +234,15 @@ const DealerDashboard = () => {
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Button variant="outline" className="text-sm">
-                    Most Recent
+                  <Button
+                    variant="outline"
+                    className="text-sm"
+                    onClick={() => {
+                      setVehicleType(vehicleType);
+                      navigate("/");
+                    }}
+                  >
+                    {vehicleType === "car" ? "Post Car" : "Post Bike"}
                   </Button>
                 </div>
               </div>
