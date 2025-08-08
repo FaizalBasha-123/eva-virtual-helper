@@ -15,6 +15,7 @@ import UnifiedVehicleCard from "@/components/shared/UnifiedVehicleCard";
 import { useCanonical } from "@/hooks/useCanonical";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
+import { generateVehicleSlug } from "@/utils/slugUtils";
 import { useToast } from "@/hooks/use-toast";
 
 const DealerDashboard = () => {
@@ -61,8 +62,8 @@ const DealerDashboard = () => {
     try {
       const tableName = vehicleType === 'car' ? 'car_seller_listings' : 'bike_seller_listings';
       // Filter vehicles by dealer_id
-      const { data: vehicleData, error: vehicleError } = await supabase
-        .from(tableName)
+      const { data: vehicleData, error: vehicleError } = await (supabase
+        .from(tableName as any) as any)
         .select('*')
         .eq('dealer_id', dealerId)
         .limit(10);
@@ -99,6 +100,34 @@ const DealerDashboard = () => {
   // Function to clear all filters
   const clearFilters = () => {
     setAppliedFilters({});
+  };
+
+  const handleViewDetails = (vehicle: any) => {
+    const slug = generateVehicleSlug({
+      brand: vehicle.brand || 'unknown',
+      model: vehicle.model || 'unknown',
+      variant: vehicle.variant || 'base',
+      fuel_type: vehicle.fuel_type || 'petrol',
+      year: vehicle.year || new Date().getFullYear(),
+      seller_location_city: vehicle.seller_location_city || 'india',
+      id: vehicle.id
+    });
+    const route = vehicleType === 'car' ? `/used-car-details/${slug}` : `/used-bike-details/${slug}`;
+    navigate(route);
+  };
+
+  const handleDeleteVehicle = async (vehicle: any) => {
+    if (!window.confirm(`Delete ${vehicle.year} ${vehicle.brand} ${vehicle.model}? This cannot be undone.`)) return;
+    try {
+      const tableName = vehicleType === 'car' ? 'car_seller_listings' : 'bike_seller_listings';
+      const { error } = await supabase.from(tableName).delete().eq('id', vehicle.id);
+      if (error) throw error;
+      setVehicles(prev => prev.filter(v => v.id !== vehicle.id));
+      toast({ title: 'Deleted', description: 'Vehicle removed successfully.' });
+    } catch (err: any) {
+      console.error('Delete error:', err);
+      toast({ title: 'Error', description: err.message || 'Failed to delete', variant: 'destructive' });
+    }
   };
 
   if (loading) {
@@ -212,7 +241,15 @@ const DealerDashboard = () => {
             {/* Vehicle Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
               {vehicles.map((vehicle: any) => (
-                <UnifiedVehicleCard key={vehicle.id} vehicle={vehicle} type={vehicleType} />
+                <UnifiedVehicleCard
+                  key={vehicle.id}
+                  vehicle={vehicle}
+                  type={vehicleType}
+                  showActions
+                  hideFavourite
+                  onViewDetails={() => handleViewDetails(vehicle)}
+                  onDelete={() => handleDeleteVehicle(vehicle)}
+                />
               ))}
             </div>
             {vehicles.length === 0 && (
