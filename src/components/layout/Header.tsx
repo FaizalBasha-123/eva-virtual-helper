@@ -99,7 +99,7 @@ const Header = () => {
           <div className="flex items-center justify-between">
             <Link 
               to="/" 
-              className="text-2xl font-bold text-primary flex items-center gap-2 group"
+              className="text-lg font-bold text-primary flex items-center gap-2 group"
             >
               <img 
                 src="/resource-uploads/a47ef4ec-4126-4237-8391-444437db8ec1.png" 
@@ -123,7 +123,7 @@ const Header = () => {
               {typeof window !== 'undefined' && localStorage.getItem('dealerName') && (
                 <Button
                   variant="outline"
-                  className="font-semibold text-primary border-white bg-gray-100"
+                  className="font-semibold text-primary border-white bg-gray-400"
                   onClick={() => navigate('/dealer-dashboard')}
                 >
                   {localStorage.getItem('dealerName')}
@@ -154,17 +154,34 @@ const Header = () => {
                   Buy Bikes
                 </Link>
               <Link
-                  to="/dealers"
-                  className={`nav-link font-medium transition-colors flex items-center ${
-                    isNavItemActive('dealers') 
-                      ? 'text-primary link-underline after:scale-x-100 after:origin-bottom-left' 
-                      : 'text-foreground hover:text-primary link-underline'
-                  }`}
-                  onMouseEnter={() => setHoveredItem('dealers')}
-                  onMouseLeave={() => setHoveredItem(null)}
-                >
-                  Dealer
-                </Link>
+                to="#"
+                className={`nav-link font-medium transition-colors flex items-center ${
+                  isNavItemActive('dealers') 
+                    ? 'text-primary link-underline after:scale-x-100 after:origin-bottom-left' 
+                    : 'text-foreground hover:text-primary link-underline'
+                }`}
+                onClick={async (e) => {
+                  e.preventDefault();
+                  // Fetch all dealer ids
+                  try {
+                    const { supabase } = await import('@/integrations/supabase/client');
+                    const { data, error } = await supabase
+                      .from('dealer_details')
+                      .select('id')
+                      .order('name');
+                    if (error || !data || data.length === 0) return;
+                    const firstId = data[0].id;
+                    navigate(`/dealerdetails?dealerId=${firstId}`);
+                  } catch (err) {
+                    // fallback: go to /dealers
+                    navigate('/dealers');
+                  }
+                }}
+                onMouseEnter={() => setHoveredItem('dealers')}
+                onMouseLeave={() => setHoveredItem(null)}
+              >
+                Dealer
+              </Link>
               <div className="flex items-center space-x-4">
                 <AuthButtons className="ml-2" />
                 <ThemeToggle />
