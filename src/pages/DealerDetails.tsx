@@ -205,6 +205,19 @@ const DealerDetails: React.FC = () => {
     }
   };
 
+  // Enable left/right arrow key navigation for dealer switching
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        navigateToPreviousDealer();
+      } else if (e.key === 'ArrowRight') {
+        navigateToNextDealer();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentDealerIndex, allDealers]);
+
   if (!dealer && !loading) {
     return (
       <Layout>
@@ -244,7 +257,7 @@ const DealerDetails: React.FC = () => {
                     className="text-white hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed p-2"
                     title="Previous Dealer"
                   >
-                    <ChevronLeft className="w-5 h-5" />
+                    <ChevronLeft className="w-6 h-6" />
                   </Button>
                   
                   {/* Dealer Name */}
@@ -265,10 +278,10 @@ const DealerDetails: React.FC = () => {
                     size="sm"
                     onClick={navigateToNextDealer}
                     disabled={currentDealerIndex >= allDealers.length - 1}
-                    className="text-white hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed p-2"
+                    className="text-white bg-yellow-400/80 border-2 border-yellow-600 shadow-lg hover:bg-yellow-500/90 disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded-full transition-all duration-200"
                     title="Next Dealer"
                   >
-                    <ChevronRight className="w-5 h-5" />
+                    <ChevronRight className="w-6 h-6" />
                   </Button>
                 </div>
 
@@ -325,7 +338,7 @@ const DealerDetails: React.FC = () => {
                     className="text-white hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed p-2"
                     title="Previous Dealer"
                   >
-                    <ChevronLeft className="w-5 h-5" />
+                    <ChevronLeft className="w-6 h-6" />
                   </Button>
                   <div className="text-center">
                     <h1 className="text-3xl font-bold text-white">
@@ -345,7 +358,7 @@ const DealerDetails: React.FC = () => {
                     className="text-white hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed p-2"
                     title="Next Dealer"
                   >
-                    <ChevronRight className="w-5 h-5" />
+                    <ChevronRight className="w-6 h-6" />
                   </Button>
                 </div>
 
